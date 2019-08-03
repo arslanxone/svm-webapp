@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shipping Items Prediction System</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, textarea, label, p { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 28px;
+      color: #fff;
+      z-index: 2;
+ line-height: 83px;
+      }
+      textarea {
+      width: calc(100% - 12px);
+      padding: 5px;
+      }
+      .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+      }
+      .result {
+        display: flex;
+        justify-content: center;
+       align-items: center;
+       height: inherit;
+       padding: 20px;
+      }
+      form {
+      width: 100%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 8px #006622; 
+      }
+      input, select, textarea {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      input[type="date"] {
+      padding: 4px 5px;
+      }
+      textarea {
+      width: calc(100% - 12px);
+      padding: 5px;
+    }
+      .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+      color:  #006622;
+      }
+      .item input:hover, .item select:hover, .item textarea:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 3px 0  #006622;
+      color: #006622;
+      }
+      .item {
+      position: relative;
+      margin: 10px 0;
+      }
+      .item span {
+      color: red;
+      }
+      input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+      }
+      .item i, input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      font-size: 20px;
+      color: #00b33c;
+      }
+      .item i {
+      right: 1%;
+      top: 30px;
+      z-index: 1;
+      }
+ .week {
+      display:flex;
+      justify-content:space-between;
+      }
+      .colums {
+      display:flex;
+      justify-content:space-between;
+      flex-direction:row;
+      flex-wrap:wrap;
+      }
+      .colums div {
+      width:48%;
+      }
+      [type="date"]::-webkit-calendar-picker-indicator {
+      right: 1%;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+      }
+      input[type=radio], input[type=checkbox]  {
+      display: none;
+      }
+      label.radio {
+      position: relative;
+  display: inline-block;
+      margin: 5px 20px 15px 0;
+      cursor: pointer;
+      }
+      .question span {
+      margin-left: 30px;
+      }
+      .question-answer label {
+      display: block;
+      }
+      label.radio:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      }
+      input[type=radio]:checked + label:before, label.radio:hover:before {
+      border: 2px solid  #006622;
+      }
+      label.radio:after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 8px;
+      height: 4px;
+      border: 3px solid  #006622;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      opacity: 0;
+      }
+      input[type=radio]:checked + label:after {
+      opacity: 1;
+      }
+      .flax {
+      display:flex;
+      justify-content:space-around;
+      }
+      .btn-block {
+      margin-top: 10px;
+      text-align: center;
+      }
+      button {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px; 
+      background:  #006622;
+      font-size: 16px;
+      color: #fff;
+cursor: pointer;
+      }
+      button:hover {
+      background:  #00b33c;
+      }
+      @media (min-width: 568px) {
+      .name-item, .city-item {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      }
+      .name-item input, .name-item div {
+      width: calc(50% - 20px);
+      }
+      .name-item div input {
+      width:97%;}
+      .name-item div label {
+      display:block;
+      padding-bottom:5px;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="testbox">
+      <form action="{{ url_for('main') }}" method="POST">
+        <div class="banner">
+          <h1 style="color:black;">Shipping Items Prediction System</h1>
+        </div>
+        <br/>
+<br><br><br>
+        <fieldset>
+          <legend>Product Information</legend>
+<div class="colums">
+    <div class="item">
+            <label for="asin"> asin<span>*</span></label>
+            <input id="asin" type="text" name="asin" />
+          </div>
+    <div class="item">
+            <label for="initial_identifier"> initial_identifier<span>*</span></label>
+            <input id="initial_identifier" type="text" name="initial_identifier" />
+          </div>
+    <div class="item">
+            <label for="title">title</label>
+            <input id="title" type="text"   name="title" />
+          </div>
+    <div class="item">
+            <label for="brand">brand</label>
+            <input id="brand" type="text"   name="brand" />
+          </div>
+    <div class="item">
+            <label for="manufacturer">manufacturer</label>
+            <input id="manufacturer" type="text"   name="manufacturer" />
+          </div>
+    <div class="item">
+            <label for="publisher">publisher</label>
+            <input id="publisher" type="text"   name="publisher" />
+          </div>
+    <div class="item">
+            <label for="studio">studio</label>
+            <input id="studio" type="text"   name="studio" />
+          </div>
+    <div class="item">
+            <label for="label">label</label>
+            <input id="label" type="text"   name="label" />
+          </div>
+    <div class="item">
+            <label for="features">features</label>
+            <input id="features" type="text"   name="features" />
+    </div>
+    
+    <div class="item">
+            <label for="all_categories">all_categories</label>
+            <input id="all_categories" type="text"   name="all_categories" />
+    </div> 
+    <div class="item">
+            <label for="nodeid_tree">nodeid_tree</label>
+            <input id="nodeid_tree" type="text"   name="nodeid_tree" />
+    </div>
+    <div class="item">
+            <label for="subcategory">subcategory</label>
+            <input id="subcategory" type="text"   name="subcategory" />
+    </div>
+    <div class="item">
+            <label for="part_num">part_num</label>
+            <input id="part_num" type="text"   name="part_num" />
+    </div>
+    <div class="item">
+            <label for="mpn">mpn</label>
+            <input id="mpn" type="text"  name="mpn" />
+    </div>
+    <div class="item">
+            <label for="product_type_name">product_type_name</label>
+            <input id="product_type_name" type="text"   name="product_type_name" />
+    </div>
+    <div class="item">
+            <label for="category">category</label>
+            <input id="category" type="text"   name="category" />
+    </div>
+    <div class="item">
+            <label for="model">model</label>
+            <input id="model" type="text"   name="model" />
+    </div>
+    <div class="item">
+            <label for="sku">sku</label>
+            <input id="sku" type="text"   name="sku" />
+    </div>
+    <div class="item">
+            <label for="product_group">product_group</label>
+            <input id="product_group" type="text"   name="product_group" />
+    </div>
+    <div class="item">
+            <label for="parent_asin">parent_asin</label>
+            <input id="parent_asin" type="text"   name="parent_asin" />
+    </div>
+    <div class="item">
+            <label for="color">color</label>
+            <input id="color" type="text"   name="color" />
+    </div>
+    <div class="item">
+            <label for="binding">binding</label>
+            <input id="binding" type="text"   name="binding" />
+    </div><div class="item">
+            <label for="size">size</label>
+            <input id="size" type="text"   name="size" />
+    </div><div class="item">
+            <label for="package_dimensions_width">package_dimensions_width</label>
+            <input id="package_dimensions_width" type="text"   name="package_dimensions_width" />
+    </div><div class="item">
+            <label for="package_dimensions_length">package_dimensions_length</label>
+            <input id="package_dimensions_length" type="text"   name="package_dimensions_length" />
+    </div>
+</div>            
+   </fieldset>
+        <br/>
+        <div class="btn-block">
+          <button type="submit" href="/">Submit</button>
+        </div>
+
+        <div class="result" align="center">
+                {% if result %}
+                    {% for variable, value in original_input.items() %}
+                        <b>{{ variable }}</b> : {{ value }}
+                    {% endfor %}
+                    <font size="6" color="red">Output:  Product </font>:<br><br>
+                        {% if result > 0.5 %}
+                         <font size="6" color="red">Allowed....!</font> 
+                        {% else %}
+                         <font size="6" color="red">Prohibited....!</font> 
+                        {% endif %}   
+                {% endif %}
+         </div>    
+      </form>
+    </div>
+  </body>
+</html>
