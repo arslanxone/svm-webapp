@@ -107,4 +107,4 @@ def main():
         # of the values they input before
         return flask.render_template('main.html',original_input={},result=prediction,)
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port='5000', debug=True)
+    app.run()
