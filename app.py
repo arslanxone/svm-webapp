@@ -2,6 +2,8 @@ import pandas as pd
 import flask
 import pickle
 import numpy as np
+import portalocker
+
 
 # Use pickle to load in the pre-trained model.
 with open('model/SVM.pkl', 'rb') as f:
@@ -83,7 +85,7 @@ def main():
         
         
 
-        print(input_variables) 
+        # print(input_variables) 
         #encoding and assigning mapping 
         classifier_encoded_variables=[]
         for val in classifier_variables:
