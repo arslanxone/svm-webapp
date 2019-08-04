@@ -2,7 +2,7 @@ import pandas as pd
 import flask
 import pickle
 import numpy as np
-import portalocker
+
 
 
 # Use pickle to load in the pre-trained model.
