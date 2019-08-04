@@ -8,6 +8,7 @@ import numpy as np
 # Use pickle to load in the pre-trained model.
 with open('model/SVM.pkl', 'rb') as f:
     svm_model = pickle.load(f)
+    
 with open('model/m1.pkl', 'rb') as fp:
     m1 = pickle.load(fp)
 with open('model/m2.pkl', 'rb') as fq:
